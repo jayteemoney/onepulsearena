@@ -2,7 +2,7 @@ import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@
 import { Transaction } from '@mysten/sui/transactions';
 import type { SuiObjectData } from '@mysten/sui/client';
 import { useState, useCallback, useEffect } from 'react';
-import { PACKAGE_ID, MODULES, GAME_STATE_ID } from '../config/sui';
+import { PACKAGE_ID, MODULES, GAME_STATE_ID, GLOBAL_LEADERBOARD_ID, DAILY_LEADERBOARD_ID } from '../config/sui';
 import toast from 'react-hot-toast';
 
 export interface PlayerProfile {
@@ -42,6 +42,8 @@ export function useOnePulseArena() {
   const fetchProfile = useCallback(async () => {
     if (!account?.address) return;
 
+    console.log('🔍 Fetching player profile for:', account.address);
+
     try {
       const objects = await client.getOwnedObjects({
         owner: account.address,
@@ -53,11 +55,13 @@ export function useOnePulseArena() {
         },
       });
 
+      console.log(`📊 Found ${objects.data.length} PlayerProfile objects`);
+
       if (objects.data.length > 0) {
         const profileData = objects.data[0].data as SuiObjectData;
         if (profileData.content && 'fields' in profileData.content) {
           const fields = profileData.content.fields as any;
-          setProfile({
+          const profile = {
             id: profileData.objectId,
             player: fields.player,
             score: parseInt(fields.score),
@@ -65,11 +69,20 @@ export function useOnePulseArena() {
             yieldAccrued: parseInt(fields.yield_accrued),
             lastPulseTimestamp: parseInt(fields.last_pulse_timestamp),
             createdAt: parseInt(fields.created_at),
+          };
+          setProfile(profile);
+          console.log('✅ Profile loaded:', {
+            id: profile.id,
+            score: profile.score,
+            pulses: profile.totalPulses,
           });
         }
+      } else {
+        console.log('ℹ️  No profile found - user needs to create one');
+        setProfile(null);
       }
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      console.error('❌ Error fetching profile:', error);
     }
   }, [account?.address, client]);
 
@@ -96,9 +109,20 @@ export function useOnePulseArena() {
   // Create player profile
   const createProfile = useCallback(async () => {
     if (!account?.address) {
+      console.warn('⚠️ No wallet connected for profile creation');
       toast.error('Please connect wallet first');
       return;
     }
+
+    if (!gameStateId) {
+      console.error('❌ GameState ID not configured for profile creation');
+      toast.error('Game not configured - check .env file');
+      return;
+    }
+
+    console.log('👤 Creating player profile...');
+    console.log('  Wallet:', account.address);
+    console.log('  GameState ID:', gameStateId);
 
     setLoading(true);
     try {
@@ -115,17 +139,27 @@ export function useOnePulseArena() {
         ],
       });
 
+      console.log('📤 Submitting profile creation transaction...');
       const result = await signAndExecute({
         transaction: tx,
       });
 
       if (result && 'digest' in result) {
+        console.log('✅ Profile created successfully!');
+        console.log('  Transaction digest:', result.digest);
+
         toast.success('Profile created successfully!');
         await fetchProfile();
       }
     } catch (error: any) {
-      console.error('Error creating profile:', error);
-      toast.error(error.message || 'Failed to create profile');
+      console.error('❌ Error creating profile:', error);
+      console.error('  Full error:', JSON.stringify(error, null, 2));
+
+      if (error.message?.includes('Rejected')) {
+        toast.error('Transaction rejected by user');
+      } else {
+        toast.error(error.message || 'Failed to create profile');
+      }
     } finally {
       setLoading(false);
     }
@@ -140,16 +174,35 @@ export function useOnePulseArena() {
 
   // Record a pulse action
   const recordPulse = useCallback(async () => {
-    if (!account?.address || !profile) {
-      toast.error('Profile not found');
+    if (!account?.address) {
+      console.warn('⚠️ No wallet connected');
+      toast.error('Please connect wallet first');
       return;
     }
+
+    if (!profile) {
+      console.warn('⚠️ No profile found');
+      toast.error('Profile not found - please create one first');
+      return;
+    }
+
+    if (!gameStateId) {
+      console.error('❌ GameState ID not configured');
+      toast.error('Game not configured properly');
+      return;
+    }
+
+    console.log('⚡ Recording pulse...');
+    console.log('  Profile ID:', profile.id);
+    console.log('  GameState ID:', gameStateId);
+    console.log('  Current Score:', profile.score);
 
     setLoading(true);
     try {
       const tx = new Transaction();
       const clock = tx.object('0x6');
 
+      // Record pulse action
       tx.moveCall({
         target: `${MODULES.ONEPULSE_ARENA}::record_pulse`,
         arguments: [
@@ -159,11 +212,46 @@ export function useOnePulseArena() {
         ],
       });
 
+      // Update global leaderboard
+      if (GLOBAL_LEADERBOARD_ID) {
+        tx.moveCall({
+          target: `${MODULES.LEADERBOARD}::update_global_leaderboard`,
+          arguments: [
+            tx.object(GLOBAL_LEADERBOARD_ID),
+            tx.pure.address(account.address),
+            tx.pure.id(profile.id),
+            tx.pure.u64(profile.score + 100), // New score after pulse
+            tx.pure.u64(profile.totalPulses + 1), // New pulse count
+            clock,
+          ],
+        });
+      }
+
+      // Update daily leaderboard
+      if (DAILY_LEADERBOARD_ID) {
+        tx.moveCall({
+          target: `${MODULES.LEADERBOARD}::update_daily_leaderboard`,
+          arguments: [
+            tx.object(DAILY_LEADERBOARD_ID),
+            tx.pure.address(account.address),
+            tx.pure.id(profile.id),
+            tx.pure.u64(profile.score + 100), // New score after pulse
+            tx.pure.u64(profile.totalPulses + 1), // New pulse count
+            clock,
+          ],
+        });
+      }
+
+      console.log('📤 Submitting transaction...');
       const result = await signAndExecute({
         transaction: tx,
       });
 
       if (result && 'digest' in result) {
+        console.log('✅ Transaction successful!');
+        console.log('  Digest:', result.digest);
+        console.log('  Events should be emitted on-chain');
+
         toast.success('+100 points!', {
           icon: '⚡',
           style: {
@@ -175,9 +263,13 @@ export function useOnePulseArena() {
         return result;
       }
     } catch (error: any) {
-      console.error('Error recording pulse:', error);
+      console.error('❌ Error recording pulse:', error);
+      console.error('  Full error:', JSON.stringify(error, null, 2));
+
       if (error.message?.includes('EPulseCooldown')) {
         toast.error('Pulse cooldown! Wait 1 second.');
+      } else if (error.message?.includes('Rejected')) {
+        toast.error('Transaction rejected by user');
       } else {
         toast.error(error.message || 'Failed to record pulse');
       }
