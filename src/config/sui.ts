@@ -1,4 +1,4 @@
-import { getFullnodeUrl } from '@mysten/sui.js/client';
+import { getFullnodeUrl } from '@mysten/sui/client';
 import { createNetworkConfig } from '@mysten/dapp-kit';
 
 // OneChain testnet configuration

@@ -1,6 +1,6 @@
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
 import { Transaction } from '@mysten/sui/transactions';
-import { SuiObjectData } from '@mysten/sui/client';
+import type { SuiObjectData } from '@mysten/sui/client';
 import { useState, useCallback, useEffect } from 'react';
 import { PACKAGE_ID, MODULES, GAME_STATE_ID } from '../config/sui';
 import toast from 'react-hot-toast';
