@@ -55,16 +55,35 @@ export function Leaderboard() {
   // Update from real-time events
   useEffect(() => {
     if (leaderboardEvents.length > 0) {
-      // Update local leaderboard from events
-      const newLeaderboard = leaderboardEvents
-        .filter((e) => e.leaderboardType === 'GLOBAL')
-        .slice(0, 10)
-        .map((e) => ({
-          address: e.player,
-          score: e.score,
-          rank: e.rank,
-        }));
+      console.log('📊 Processing leaderboard events:', leaderboardEvents);
 
+      // Create a map to track the latest state for each player
+      const playerMap = new Map<string, { address: string; score: number; rank: number }>();
+
+      // Process events (most recent first since they're added to beginning)
+      leaderboardEvents
+        .filter((e) => {
+          console.log('  Event leaderboardType:', e.leaderboardType);
+          return e.leaderboardType === 'GLOBAL';
+        })
+        .forEach((e) => {
+          // Only update if we don't have this player or this is a higher score
+          const existing = playerMap.get(e.player);
+          if (!existing || e.score >= existing.score) {
+            playerMap.set(e.player, {
+              address: e.player,
+              score: e.score,
+              rank: e.rank,
+            });
+          }
+        });
+
+      // Convert map to array and sort by score (descending)
+      const newLeaderboard = Array.from(playerMap.values())
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10);
+
+      console.log('✅ Updated leaderboard:', newLeaderboard);
       updateLeaderboard(newLeaderboard);
     }
   }, [leaderboardEvents, updateLeaderboard]);
