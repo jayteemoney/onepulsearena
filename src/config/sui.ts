@@ -3,7 +3,14 @@ import { createNetworkConfig } from '@mysten/dapp-kit';
 
 // OneChain testnet configuration
 const ONECHAIN_TESTNET_URL = import.meta.env.VITE_ONECHAIN_RPC_URL || getFullnodeUrl('testnet');
-const ONECHAIN_WS_URL = import.meta.env.VITE_ONECHAIN_WS_URL;
+
+// Debug: Log configuration in development
+if (import.meta.env.DEV) {
+  console.log('🔧 Sui Configuration:');
+  console.log('  RPC URL:', ONECHAIN_TESTNET_URL);
+  console.log('  Package ID:', import.meta.env.VITE_PACKAGE_ID || 'Not set');
+  console.log('  Event Sync: Polling mode (3s interval)');
+}
 
 export const PACKAGE_ID = import.meta.env.VITE_PACKAGE_ID || '';
 export const GAME_STATE_ID = import.meta.env.VITE_GAME_STATE_ID || '';
@@ -33,7 +40,6 @@ export const GAME_CONFIG = {
   PULSE_VALUE: parseInt(import.meta.env.VITE_PULSE_VALUE || '100'),
   PULSE_COOLDOWN_MS: parseInt(import.meta.env.VITE_PULSE_COOLDOWN_MS || '1000'),
   YIELD_RATE: parseFloat(import.meta.env.VITE_YIELD_RATE || '0.0001'),
-  WS_URL: ONECHAIN_WS_URL,
 };
 
 // Module names for contract interactions

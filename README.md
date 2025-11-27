@@ -2,13 +2,9 @@
 
 **Production-Ready Real-Time Multiplayer GameFi on Sui/Move**
 
-[![OneHack 2025](https://img.shields.io/badge/OneHack-2025-blue)](https://onehack.onechain.com) [![Sui](https://img.shields.io/badge/Sui-Move-6fbcf0)](https://sui.io) [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE) [![Live Demo](https://img.shields.io/badge/demo-live-success)](https://onepulsearena.vercel.app)
-
 > A next-generation blockchain gaming platform demonstrating OneChain's five pillars through a cyberpunk-themed multiplayer arena with instant transactions, real-time leaderboards, and innovative yield mechanics.
 
 ---
-
-## 🏅 Competitive Advantages
 
 ### Why OnePulse Arena Stands Out
 
@@ -42,7 +38,7 @@
 
 ---
 
-## 🎮 What is OnePulse Arena?
+##  What is OnePulse Arena?
 
 OnePulse Arena is a **production-ready blockchain gaming platform** that showcases OneChain's capabilities through engaging multiplayer gameplay. Players compete in a cyberpunk arena, earning points and yield through pulse actions while experiencing the speed and scalability of Sui's Move language.
 
@@ -57,7 +53,7 @@ Unlike traditional blockchain games that feel sluggish or disconnected, OnePulse
 
 ---
 
-## 🚀 Technical Achievements
+## Technical Achievements
 
 ### Recent Production Fixes (Last 4 Commits)
 
@@ -119,7 +115,7 @@ Real-Time UI Updates (Live Feed + Leaderboard)
 
 ---
 
-## 🎯 OneChain Five Pillars Integration
+##  OneChain Five Pillars Integration
 
 ### ⚡ Speed
 - **Transaction Confirmation**: ~100-200ms average
@@ -127,25 +123,25 @@ Real-Time UI Updates (Live Feed + Leaderboard)
 - **Event Polling**: 3-second intervals with sub-second processing
 - **Total Player-to-Player Latency**: ~300ms end-to-end
 
-### 📈 Scalability
+### Scalability
 - **Parallel Execution**: Sui's object model enables concurrent pulse actions
 - **Horizontal Scaling**: Event polling architecture supports 1000+ clients
 - **Efficient State Management**: Minimal blockchain reads, event-driven updates
 - **Future-Ready**: Architecture supports sharding for massive multiplayer
 
-### 🔒 Security
+###  Security
 - **Resource Safety**: Move's ownership model prevents double-spending
 - **Access Control**: Profile ownership verification on all mutations
 - **Event Integrity**: Cryptographically signed blockchain events
 - **Cooldown Enforcement**: Smart contract-level rate limiting
 
-### 🌐 Accessibility
+###  Accessibility
 - **One-Click Onboarding**: OneWallet integration via dapp-kit
 - **Gas Abstraction Ready**: Architecture supports sponsored transactions
 - **Social Login Ready**: Built for zkLogin integration
 - **Mobile-Responsive**: Adaptive UI for all devices (coming soon)
 
-### 💰 Innovation
+###  Innovation
 - **Play-to-Earn Mechanics**: Yield generation from gameplay
 - **Dual Leaderboard System**: Global (all-time) + Daily (24h reset)
 - **NFT Achievements**: Soulbound badges + tradeable yield cards
@@ -153,7 +149,7 @@ Real-Time UI Updates (Live Feed + Leaderboard)
 
 ---
 
-## 🏗️ Smart Contract Architecture
+## Smart Contract Architecture
 
 ### Module: `onepulse_arena.move`
 
@@ -217,7 +213,7 @@ public fun update_global_leaderboard(
 
 ---
 
-## 📊 Performance Metrics
+## Performance Metrics
 
 ### Blockchain Performance
 | Metric | Value | Benchmark |
@@ -237,7 +233,7 @@ public fun update_global_leaderboard(
 
 ---
 
-## 🎨 User Experience
+## User Experience
 
 ### Player Journey
 1. **Connect Wallet** → One-click with OneWallet (3 seconds)
@@ -256,7 +252,7 @@ public fun update_global_leaderboard(
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Node.js 18+ and npm
@@ -305,7 +301,7 @@ npm run dev
 
 ---
 
-## 🎮 How to Play
+## How to Play
 
 ### Controls
 - **Arrow Keys**: Move your player around the arena
@@ -329,7 +325,7 @@ npm run dev
 
 ---
 
-## 🧪 Testing & Quality Assurance
+##  Testing & Quality Assurance
 
 ### Smart Contract Tests
 
@@ -360,7 +356,7 @@ sui move test
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 onepulsearena/
@@ -410,26 +406,13 @@ onepulsearena/
 
 ---
 
-## 🔗 Live Demo & Resources
+## Live Demo & Resources
 
-### Try It Now
-🎮 **Live Demo**: https://onepulsearena.vercel.app (Coming Soon)
-📺 **Demo Video**: [YouTube Link] (3-minute walkthrough)
-🐙 **GitHub**: https://github.com/jayteemoney/onepulsearena
-
-### Documentation
-📖 **Setup Guide**: See `SETUP.md` for detailed deployment steps
-🔧 **API Reference**: Inline documentation in all smart contracts
-🎨 **Design System**: See `styles/` directory for theme tokens
-
-### Community
-💬 **OneChain Telegram**: https://t.me/hello_onechain
-🎭 **Sui Discord**: https://discord.gg/sui
-🐦 **Twitter**: [@jayteemoney] (project updates)
-
+**Demo Video**: [YouTube Link] (3-minute walkthrough)
+**GitHub**: https://github.com/jayteemoney/onepulsearena
 ---
 
-## 🏆 Hackathon Submission - OneHack 2025
+##  Hackathon Submission - OneHack 2025
 
 ### Project Category
 **GameFi** - Real-time multiplayer gaming on blockchain
@@ -442,23 +425,23 @@ onepulsearena/
 5. **Scalable Architecture**: Event-driven design supports 1000+ concurrent players
 
 ### OneChain Pillar Showcase
-✅ **Speed**: 100-200ms transactions
-✅ **Scalability**: Parallel execution, event streaming
-✅ **Security**: Move resource safety, cooldown enforcement
-✅ **Accessibility**: One-click wallet connection
-✅ **Innovation**: Yield generation, dual leaderboards, achievement NFTs
+**Speed**: 100-200ms transactions
+ **Scalability**: Parallel execution, event streaming
+ **Security**: Move resource safety, cooldown enforcement
+ **Accessibility**: One-click wallet connection
+ **Innovation**: Yield generation, dual leaderboards, achievement NFTs
 
 ### Deliverables
-- ✅ Working smart contracts deployed on testnet
-- ✅ Functional frontend with real-time multiplayer
-- ✅ Comprehensive documentation (README, SETUP, inline comments)
-- ✅ Demo video (3 minutes)
-- ✅ Open-source repository (MIT license)
-- ✅ Live demo deployment
+- Working smart contracts deployed on testnet
+- Functional frontend with real-time multiplayer
+- Comprehensive documentation (README, SETUP, inline comments)
+- Demo video (3 minutes)
+- Open-source repository (MIT license)
+- Live demo deployment
 
 ---
 
-## 🛣️ Roadmap
+##  Roadmap
 
 ### Phase 1: MVP (Completed) ✅
 - [x] Move smart contracts with testing
@@ -494,7 +477,7 @@ onepulsearena/
 
 ---
 
-## 🔒 Security Considerations
+## Security Considerations
 
 ### Smart Contract Safety
 - **Ownership Checks**: All mutations verify `msg_sender == profile.player`
@@ -516,7 +499,7 @@ onepulsearena/
 
 ---
 
-## 📝 License & Attribution
+##  License & Attribution
 
 ### License
 MIT License - see [LICENSE](LICENSE) file for details
@@ -533,7 +516,7 @@ This project was built from scratch during OneHack 2025 (Nov 21-28, 2025). All s
 
 ---
 
-## 💬 Support & Contact
+## Support & Contact
 
 ### Getting Help
 1. **Issues**: Open a GitHub issue for bugs or questions
@@ -553,7 +536,7 @@ We welcome contributions! Please:
 
 ---
 
-## 🎯 Final Thoughts for Judges
+##  Final Thoughts for Judges
 
 OnePulse Arena represents **production-ready blockchain gaming**. This isn't just a hackathon prototype - it's a fully functional, well-architected platform that demonstrates:
 
@@ -565,10 +548,3 @@ OnePulse Arena represents **production-ready blockchain gaming**. This isn't jus
 
 The recent production fixes (4 commits) show **professional engineering practices** - identifying issues, implementing clean solutions, and deploying with confidence.
 
-**OnePulse Arena is ready for mainnet launch** and real user adoption.
-
----
-
-**Built with ❤️ for OneHack 2025 | Powered by OneChain + Sui Move**
-
-*Where Speed Meets Gaming. Where Finance Meets Fun.*

@@ -2,7 +2,7 @@ import { useSuiEventStream } from '../hooks/useSuiEventStream';
 import { useEffect, useRef } from 'react';
 
 export function LiveFeed() {
-  const { pulseEvents, isConnected } = useSuiEventStream();
+  const { pulseEvents, isPolling, lastPollTime, errorCount } = useSuiEventStream();
   const feedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,22 +11,51 @@ export function LiveFeed() {
     }
   }, [pulseEvents]);
 
+  // Format last poll time
+  const getLastPollText = () => {
+    if (!lastPollTime) return 'Starting...';
+    const seconds = Math.floor((Date.now() - lastPollTime.getTime()) / 1000);
+    return `${seconds}s ago`;
+  };
+
   return (
     <div className="bg-cyber-dark border-2 border-neon-blue rounded-lg p-6 w-96">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-cyber text-neon-blue flex items-center gap-2">
           <span>📡</span> Live Feed
         </h2>
-        <div className="flex items-center gap-2">
-          <div
-            className={`w-2 h-2 rounded-full ${isConnected ? 'bg-neon-green animate-pulse' : 'bg-red-500'
+        <div className="flex flex-col items-end gap-1">
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-2 h-2 rounded-full ${
+                isPolling && errorCount === 0
+                  ? 'bg-neon-green animate-pulse'
+                  : errorCount > 0 && errorCount < 3
+                  ? 'bg-yellow-500 animate-pulse'
+                  : 'bg-red-500'
               }`}
-          />
-          <span className="text-xs font-mono text-gray-400">
-            {isConnected ? 'Connected' : 'Disconnected'}
-          </span>
+            />
+            <span className="text-xs font-mono text-gray-400">
+              {isPolling && errorCount === 0
+                ? 'Polling'
+                : errorCount > 0 && errorCount < 3
+                ? 'Retry'
+                : 'Offline'}
+            </span>
+          </div>
+          {lastPollTime && errorCount === 0 && (
+            <span className="text-[10px] font-mono text-gray-500">
+              Updated: {getLastPollText()}
+            </span>
+          )}
         </div>
       </div>
+
+      {errorCount >= 3 && (
+        <div className="mb-3 p-2 bg-red-500/10 border border-red-500/30 rounded text-xs font-mono text-red-400">
+          ⚠️ Connection issues. Check your RPC endpoint.
+        </div>
+      )}
 
       <div
         ref={feedRef}
@@ -34,7 +63,7 @@ export function LiveFeed() {
       >
         {pulseEvents.length === 0 ? (
           <div className="text-gray-400 text-center py-8 font-mono text-sm">
-            Waiting for pulse actions...
+            {isPolling ? 'Waiting for pulse actions...' : 'Polling disabled'}
           </div>
         ) : (
           pulseEvents.map((event, index) => (

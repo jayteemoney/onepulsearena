@@ -12,19 +12,10 @@ function App() {
   const account = useCurrentAccount();
   const { profile, createProfile, claimYield, mintAchievement, achievements, loading } = useOnePulseArena();
 
-  // Debug: Log configuration on mount
+  // Validate configuration on mount
   useEffect(() => {
-    console.log('🔧 OnePulse Arena Configuration:');
-    console.log('  Package ID:', PACKAGE_ID || '❌ NOT SET');
-    console.log('  GameState ID:', GAME_STATE_ID || '❌ NOT SET');
-    console.log('  Network:', import.meta.env.VITE_SUI_NETWORK || 'testnet');
-    console.log('  RPC URL:', import.meta.env.VITE_ONECHAIN_RPC_URL);
-
-    if (!PACKAGE_ID) {
-      console.error('❌ PACKAGE_ID is not set! Check your .env file and restart dev server.');
-    }
-    if (!GAME_STATE_ID) {
-      console.error('❌ GAME_STATE_ID is not set! Check your .env file and restart dev server.');
+    if (!PACKAGE_ID || !GAME_STATE_ID) {
+      console.error('❌ Contract IDs not configured! Check your .env file.');
     }
   }, []);
 

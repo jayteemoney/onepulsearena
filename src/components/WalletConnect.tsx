@@ -9,8 +9,7 @@ export function WalletConnect() {
   useEffect(() => {
     // Auto-create profile if wallet connected but no profile
     if (account && !profile && !loading) {
-      // Show prompt instead of auto-creating
-      console.log('Wallet connected, profile needed');
+      // Show prompt instead of auto-creating (UI handles this automatically)
     }
   }, [account, profile, loading]);
 

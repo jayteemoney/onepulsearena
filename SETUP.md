@@ -23,7 +23,8 @@ sui --version
 
 If missing, install:
 - **Node.js**: https://nodejs.org
-- **Sui CLI**: https://docs.sui.io/build/install
+- **Sui CLI**: https://docs.sui.io/b
+uild/install
 
 ---
 
@@ -258,6 +259,59 @@ npm run deploy:move
 2. Check wallet is on **testnet** network
 3. Try clearing browser cache
 4. Use incognito mode
+
+---
+
+### Issue: "Live Feed not updating" or "Events not appearing"
+
+**Symptoms**:
+- Live Feed shows "Offline" status
+- No pulse events appearing in the feed
+- Error count increasing
+
+**Root Cause**:
+The app uses **polling mode** (fetches events every 3 seconds) instead of WebSocket for better reliability with public RPC endpoints.
+
+**Solutions**:
+
+1. **Verify RPC Configuration**:
+   ```bash
+   # Make sure .env has correct RPC URL
+   VITE_ONECHAIN_RPC_URL=https://fullnode.testnet.sui.io
+
+   # Clear cache and restart
+   rm -rf node_modules/.vite dist
+   npm run dev
+   ```
+
+2. **Check Package ID**:
+   ```bash
+   # Ensure PACKAGE_ID is set in .env
+   cat .env | grep VITE_PACKAGE_ID
+
+   # If empty, redeploy contracts
+   npm run deploy:move
+   ```
+
+3. **Test Event Queries**:
+   Open browser console and look for:
+   - `🔄 Event polling started (interval: 3s)` - Polling is active
+   - `🔧 Sui Configuration` - Shows your RPC URL and Package ID
+   - No repeated error messages about event fetching
+
+4. **For Production - Use Dedicated RPC** (Optional):
+
+   For higher reliability and lower latency, consider using a dedicated RPC provider:
+   - **Shinami**: https://www.shinami.com/ (Free tier available)
+   - **BlockVision**: https://blockvision.org/
+   - **Nodeinfra**: https://nodeinfra.com/
+
+   Update `.env`:
+   ```bash
+   VITE_ONECHAIN_RPC_URL=https://your-dedicated-rpc-url
+   ```
+
+**Note**: The app uses **polling, NOT WebSocket** for reliability. Events update every 3 seconds automatically.
 
 ---
 
