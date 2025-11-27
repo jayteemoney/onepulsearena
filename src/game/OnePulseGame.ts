@@ -185,8 +185,14 @@ export class OnePulseGameScene extends Phaser.Scene {
 
 // Preloader scene for assets
 export class PreloadScene extends Phaser.Scene {
+  private initData?: { onPulse?: () => void };
+
   constructor() {
     super({ key: 'Preload' });
+  }
+
+  init(data: { onPulse?: () => void }) {
+    this.initData = data;
   }
 
   preload() {
@@ -199,6 +205,7 @@ export class PreloadScene extends Phaser.Scene {
   }
 
   create() {
-    this.scene.start('OnePulseGame');
+    // Pass the callback data to the game scene
+    this.scene.start('OnePulseGame', this.initData);
   }
 }
