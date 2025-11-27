@@ -1,7 +1,7 @@
 import { useSuiEventStream } from '../hooks/useSuiEventStream';
 import { useGameStore } from '../stores/gameStore';
 import { useEffect, useState, useCallback } from 'react';
-import { PACKAGE_ID, GLOBAL_LEADERBOARD_ID } from '../config/sui';
+import { GLOBAL_LEADERBOARD_ID } from '../config/sui';
 import { useSuiClient } from '@mysten/dapp-kit';
 
 export function Leaderboard() {
@@ -9,8 +9,6 @@ export function Leaderboard() {
   const { leaderboard, updateLeaderboard } = useGameStore();
   const client = useSuiClient();
   const [loading, setLoading] = useState(true);
-  // @ts-ignore - used for future feature
-  const packageId = PACKAGE_ID;
 
   // Fetch initial leaderboard state from contract
   const fetchInitialLeaderboard = useCallback(async () => {
@@ -78,7 +76,11 @@ export function Leaderboard() {
       </h2>
 
       <div className="space-y-2">
-        {leaderboard.length === 0 ? (
+        {loading ? (
+          <div className="text-gray-400 text-center py-8 font-mono text-sm animate-pulse">
+            Loading leaderboard...
+          </div>
+        ) : leaderboard.length === 0 ? (
           <div className="text-gray-400 text-center py-8 font-mono text-sm">
             No players yet. Be the first!
           </div>

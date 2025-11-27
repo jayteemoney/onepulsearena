@@ -73,8 +73,9 @@ export class OnePulseGameScene extends Phaser.Scene {
       repeat: -1,
     });
 
-    // Add particles for ambient effect
-    const particles = this.add.particles(0, 0, 'particle', {
+    // Add particles for ambient effect (stored for future use)
+    // @ts-ignore - particles kept for future ambient effects
+    const _particles = this.add.particles(0, 0, 'particle', {
       x: { min: 0, max: 800 },
       y: { min: 0, max: 600 },
       speed: { min: 10, max: 30 },

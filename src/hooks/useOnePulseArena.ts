@@ -1,6 +1,6 @@
 import { useCurrentAccount, useSignAndExecuteTransaction, useSuiClient } from '@mysten/dapp-kit';
-import { TransactionBlock } from '@mysten/sui.js/transactions';
-import { SuiObjectData } from '@mysten/sui.js/client';
+import { Transaction } from '@mysten/sui/transactions';
+import { SuiObjectData } from '@mysten/sui/client';
 import { useState, useCallback, useEffect } from 'react';
 import { PACKAGE_ID, MODULES, GAME_STATE_ID } from '../config/sui';
 import toast from 'react-hot-toast';
@@ -102,7 +102,7 @@ export function useOnePulseArena() {
 
     setLoading(true);
     try {
-      const tx = new TransactionBlock();
+      const tx = new Transaction();
 
       // Get clock object
       const clock = tx.object('0x6');
@@ -117,12 +117,9 @@ export function useOnePulseArena() {
 
       const result = await signAndExecute({
         transaction: tx,
-        options: {
-          showEffects: true,
-        },
       });
 
-      if (result.effects?.status === 'success') {
+      if (result && 'digest' in result) {
         toast.success('Profile created successfully!');
         await fetchProfile();
       }
@@ -150,7 +147,7 @@ export function useOnePulseArena() {
 
     setLoading(true);
     try {
-      const tx = new TransactionBlock();
+      const tx = new Transaction();
       const clock = tx.object('0x6');
 
       tx.moveCall({
@@ -164,13 +161,9 @@ export function useOnePulseArena() {
 
       const result = await signAndExecute({
         transaction: tx,
-        options: {
-          showEffects: true,
-          showEvents: true,
-        },
       });
 
-      if (result.effects?.status === 'success') {
+      if (result && 'digest' in result) {
         toast.success('+100 points!', {
           icon: '⚡',
           style: {
@@ -207,7 +200,7 @@ export function useOnePulseArena() {
 
     setLoading(true);
     try {
-      const tx = new TransactionBlock();
+      const tx = new Transaction();
       const clock = tx.object('0x6');
 
       tx.moveCall({
@@ -221,12 +214,9 @@ export function useOnePulseArena() {
 
       const result = await signAndExecute({
         transaction: tx,
-        options: {
-          showEffects: true,
-        },
       });
 
-      if (result.effects?.status === 'success') {
+      if (result && 'digest' in result) {
         toast.success('Yield claimed!');
         await fetchProfile();
       }
@@ -255,7 +245,7 @@ export function useOnePulseArena() {
 
     setLoading(true);
     try {
-      const tx = new TransactionBlock();
+      const tx = new Transaction();
       const clock = tx.object('0x6');
 
       // Find AchievementMinter object
@@ -287,12 +277,9 @@ export function useOnePulseArena() {
 
       const result = await signAndExecute({
         transaction: tx,
-        options: {
-          showEffects: true,
-        },
       });
 
-      if (result.effects?.status === 'success') {
+      if (result && 'digest' in result) {
         toast.success(`Achievement "${achievement.name}" minted!`, {
           icon: '🏆',
           duration: 5000,
