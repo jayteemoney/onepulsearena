@@ -19,7 +19,7 @@ export function LiveFeed() {
   };
 
   return (
-    <div className="bg-cyber-dark border-2 border-neon-blue rounded-lg p-6 w-96">
+    <div className="bg-cyber-dark border-2 border-neon-blue rounded-lg p-6 w-97">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-cyber text-neon-blue flex items-center gap-2">
           <span>📡</span> Live Feed
